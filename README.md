@@ -281,4 +281,4 @@ The final submission should only be used after the author has run it, reviewed t
 
 ## Time spent
 
-**Update this honestly before submission.** Record your actual total time across design, implementation, testing, documentation, deployment, and final review. Do not submit a fabricated number.
+Approximately **20 minutes of direct hands-on work**, with substantial AI assistance used for implementation, testing, debugging, and documentation.
