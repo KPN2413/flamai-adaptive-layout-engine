@@ -2,6 +2,10 @@
 
 A framework-agnostic TypeScript layout resolver that takes **one declarative ad specification** and adapts it across very different surfaces without surface-name-specific layout code or CSS media-query layout decisions.
 
+## Live demo
+
+https://flamai-adaptive-layout-engine-delta.vercel.app/
+
 The demo includes:
 
 - Mobile portrait
