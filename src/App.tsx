@@ -1,47 +1,59 @@
-import { useMemo, useState } from 'react';
-import { SurfacePreview } from './render-dom';
-import { resolveLayout } from './resolver';
-import { adSpec } from './spec';
-import { surfaces, type SurfaceKey } from './surfaces';
-import type { SurfaceProfile } from './types';
+import { useMemo, useState } from "react";
+import { SurfacePreview } from "./render-dom";
+import { resolveLayout } from "./resolver";
+import { adSpec } from "./spec";
+import { surfaces, type SurfaceKey } from "./surfaces";
+import type { SurfaceProfile } from "./types";
 
-const surfaceEntries = Object.entries(surfaces) as [SurfaceKey, SurfaceProfile][];
+const surfaceEntries = Object.entries(surfaces) as [
+  SurfaceKey,
+  SurfaceProfile,
+][];
 
-type Selection = SurfaceKey | 'custom';
+type Selection = SurfaceKey | "custom";
 
-function makeCustomSurface(width: number, height: number, touchOnly: boolean): SurfaceProfile {
+function makeCustomSurface(
+  width: number,
+  height: number,
+  touchOnly: boolean,
+): SurfaceProfile {
   const inset = Math.max(8, Math.round(Math.min(width, height) * 0.04));
 
   if (touchOnly) {
     return {
-      id: 'custom-surface',
-      label: 'Custom / unseen surface',
+      id: "custom-surface",
+      label: "Custom / unseen surface",
       width,
       height,
       safeArea: { top: inset, right: inset, bottom: inset, left: inset },
       touchOnly: true,
       minTapTarget: 48,
-      viewingDistance: 'near',
+      viewingDistance: "near",
     };
   }
 
   return {
-    id: 'custom-surface',
-    label: 'Custom / unseen surface',
+    id: "custom-surface",
+    label: "Custom / unseen surface",
     width,
     height,
     safeArea: { top: inset, right: inset, bottom: inset, left: inset },
     touchOnly: false,
-    viewingDistance: 'near',
+    viewingDistance: "near",
   };
 }
 
-function formatRect(x: number, y: number, width: number, height: number): string {
+function formatRect(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): string {
   return `${Math.round(x)}, ${Math.round(y)} · ${Math.round(width)}×${Math.round(height)}`;
 }
 
 export default function App() {
-  const [selection, setSelection] = useState<Selection>('mobilePortrait');
+  const [selection, setSelection] = useState<Selection>("mobilePortrait");
   const [customWidth, setCustomWidth] = useState(820);
   const [customHeight, setCustomHeight] = useState(460);
   const [customTouch, setCustomTouch] = useState(true);
@@ -52,11 +64,13 @@ export default function App() {
     [customHeight, customTouch, customWidth],
   );
 
-  const surface = selection === 'custom' ? customSurface : surfaces[selection];
+  const surface = selection === "custom" ? customSurface : surfaces[selection];
   const layout = useMemo(() => resolveLayout(adSpec, surface), [surface]);
-  const visibleCount = layout.elements.filter((element) => !element.hidden).length;
+  const visibleCount = layout.elements.filter(
+    (element) => !element.hidden,
+  ).length;
   const degradedCount = layout.elements.filter(
-    (element) => element.degradation !== 'none',
+    (element) => element.degradation !== "none",
   ).length;
 
   return (
@@ -66,12 +80,15 @@ export default function App() {
           <div className="eyebrow">FlamAI Frontend R&amp;D assignment</div>
           <h1>Adaptive Layout Engine</h1>
           <p>
-            One declarative ad spec, resolved by a framework-agnostic TypeScript constraint engine.
+            One declarative ad spec, resolved by a framework-agnostic TypeScript
+            constraint engine.
           </p>
         </div>
-        <div className={`status-pill ${layout.valid ? 'status-pill--ok' : 'status-pill--error'}`}>
+        <div
+          className={`status-pill ${layout.valid ? "status-pill--ok" : "status-pill--error"}`}
+        > 
           <span className="status-dot" />
-          {layout.valid ? 'Valid layout' : 'Constraint conflict'}
+          {layout.valid ? "Valid layout" : "Constraint conflict"}
         </div>
       </header>
 
@@ -87,7 +104,7 @@ export default function App() {
                 <button
                   key={key}
                   type="button"
-                  className={`surface-option ${selection === key ? 'surface-option--active' : ''}`}
+                  className={`surface-option ${selection === key ? "surface-option--active" : ""}`}
                   onClick={() => setSelection(key)}
                 >
                   <span>{profile.label}</span>
@@ -98,8 +115,8 @@ export default function App() {
               ))}
               <button
                 type="button"
-                className={`surface-option ${selection === 'custom' ? 'surface-option--active' : ''}`}
-                onClick={() => setSelection('custom')}
+                className={`surface-option ${selection === "custom" ? "surface-option--active" : ""}`}
+                onClick={() => setSelection("custom")}
               >
                 <span>Custom / unseen</span>
                 <small>
@@ -119,8 +136,10 @@ export default function App() {
                   min="220"
                   max="2560"
                   value={customWidth}
-                  onChange={(event) => setCustomWidth(Number(event.target.value) || 220)}
-                  onFocus={() => setSelection('custom')}
+                  onChange={(event) =>
+                    setCustomWidth(Number(event.target.value) || 220)
+                  }
+                  onFocus={() => setSelection("custom")}
                 />
               </label>
               <label>
@@ -130,8 +149,10 @@ export default function App() {
                   min="180"
                   max="1800"
                   value={customHeight}
-                  onChange={(event) => setCustomHeight(Number(event.target.value) || 180)}
-                  onFocus={() => setSelection('custom')}
+                  onChange={(event) =>
+                    setCustomHeight(Number(event.target.value) || 180)
+                  }
+                  onFocus={() => setSelection("custom")}
                 />
               </label>
             </div>
@@ -141,7 +162,7 @@ export default function App() {
                 checked={customTouch}
                 onChange={(event) => {
                   setCustomTouch(event.target.checked);
-                  setSelection('custom');
+                  setSelection("custom");
                 }}
               />
               <span>Touch-only surface (48px tap target)</span>
@@ -154,20 +175,27 @@ export default function App() {
               <div>
                 <dt>Safe area</dt>
                 <dd>
-                  {surface.safeArea.top}/{surface.safeArea.right}/{surface.safeArea.bottom}/{surface.safeArea.left}px
+                  {surface.safeArea.top}/{surface.safeArea.right}/
+                  {surface.safeArea.bottom}/{surface.safeArea.left}px
                 </dd>
               </div>
               <div>
                 <dt>Viewing</dt>
-                <dd>{surface.viewingDistance ?? 'near'}</dd>
+                <dd>{surface.viewingDistance ?? "near"}</dd>
               </div>
               <div>
                 <dt>Tap target</dt>
-                <dd>{surface.touchOnly ? `${surface.minTapTarget}px` : 'N/A'}</dd>
+                <dd>
+                  {surface.touchOnly ? `${surface.minTapTarget}px` : "N/A"}
+                </dd>
               </div>
               <div>
                 <dt>Min text</dt>
-                <dd>{surface.viewingDistance === 'far' ? `${surface.minTextSize}px` : 'spec-defined'}</dd>
+                <dd>
+                  {surface.viewingDistance === "far"
+                    ? `${surface.minTextSize}px`
+                    : "spec-defined"}
+                </dd>
               </div>
             </dl>
           </section>
@@ -193,11 +221,17 @@ export default function App() {
               </div>
               <div className="preview-stats">
                 <span>{layout.composition}</span>
-                <span>{visibleCount}/{layout.elements.length} visible</span>
+                <span>
+                  {visibleCount}/{layout.elements.length} visible
+                </span>
                 <span>{degradedCount} degraded</span>
               </div>
             </div>
-            <SurfacePreview spec={adSpec} layout={layout} showDebug={showDebug} />
+            <SurfacePreview
+              spec={adSpec}
+              layout={layout}
+              showDebug={showDebug}
+            />
           </div>
 
           <div className="detail-grid">
@@ -208,10 +242,15 @@ export default function App() {
               </div>
               <div className="trace-list">
                 {layout.diagnostics.map((diagnostic, index) => (
-                  <div className={`trace-item trace-item--${diagnostic.level}`} key={`${diagnostic.code}-${index}`}>
-                    <span className="trace-index">{String(index + 1).padStart(2, '0')}</span>
+                  <div
+                    className={`trace-item trace-item--${diagnostic.level}`}
+                    key={`${diagnostic.code}-${index}`}
+                  >
+                    <span className="trace-index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                     <div>
-                      <strong>{diagnostic.code.replaceAll('_', ' ')}</strong>
+                      <strong>{diagnostic.code.replaceAll("_", " ")}</strong>
                       <p>{diagnostic.message}</p>
                     </div>
                   </div>
@@ -243,13 +282,15 @@ export default function App() {
                         </td>
                         <td>{element.priority}</td>
                         <td>
-                          <span className={`state-tag state-tag--${element.degradation}`}>
-                            {element.hidden ? 'hidden' : element.degradation}
+                          <span
+                            className={`state-tag state-tag--${element.degradation}`}
+                          >
+                            {element.hidden ? "hidden" : element.degradation}
                           </span>
                         </td>
                         <td className="mono">
                           {element.hidden
-                            ? '—'
+                            ? "—"
                             : formatRect(
                                 element.rect.x,
                                 element.rect.y,
